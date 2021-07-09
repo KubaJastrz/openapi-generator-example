@@ -1,6 +1,6 @@
 # OpenAPI Generator Example
 
-This is an example usage of [openapi-generator](https://github.com/OpenAPITools/openapi-generator).
+This is an example usage of [openapi-generator](https://github.com/OpenAPITools/openapi-generator) with [typescript-fetch](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/typescript-fetch.md) generator.
 
 ## Getting Started
 
