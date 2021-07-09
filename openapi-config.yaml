@@ -1,5 +1,5 @@
 additionalProperties:
-  typescriptThreePlus: "true"
-  useTags: "true"
-  allowUnicodeIdentifiers: "true"
-  prefixParameterInterfaces: "true"
+  typescriptThreePlus: true
+  useTags: true
+  allowUnicodeIdentifiers: true
+  prefixParameterInterfaces: true
