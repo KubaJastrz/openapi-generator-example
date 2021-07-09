@@ -8,5 +8,5 @@ docker run \
   openapitools/openapi-generator-cli generate \
     --generator-name typescript-fetch \
     --config openapi-config.yaml \
-    --input-spec schema.yml
+    --input-spec schema.yml \
     --output src/api
