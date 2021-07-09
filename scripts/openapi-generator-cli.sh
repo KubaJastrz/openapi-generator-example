@@ -1,5 +1,7 @@
 #!/bin/sh
 
+SCHEMA="${1:-schema.yml}"
+
 docker run \
   --rm \
   --workdir "/app" \
@@ -8,5 +10,8 @@ docker run \
   openapitools/openapi-generator-cli generate \
     --generator-name typescript-fetch \
     --config openapi-config.yaml \
-    --input-spec schema.yml \
+    --input-spec $SCHEMA \
     --output src/api
+
+echo "Formatting the generated files with Prettier"
+yarn prettier --write src/api
