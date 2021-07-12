@@ -41,4 +41,16 @@ It can be customized by passing the schema filename:
 yarn generate-api custom-schema.yml
 ```
 
-The generated output will be in the `src/api` directory.
+The generated output will be in the `src/api/generated-api` directory.
+
+## How it works
+
+![Generator Flow Diagram](docs/generator-flow.svg)
+
+OpenAPI Generator imports specified `schema.yml` file and generates the API classes in `src/api/generated-api` directory.
+
+The application creates ready-for-use API client with helpers for authentication in `src/api/index.ts`.
+
+Components import API client methods and make API calls.
+
+API calls are intercepted in development environment with Mock Service Worker and optionally served with mocked data on demand. In production environment the interceptor is disabled removed from the application bundle.
