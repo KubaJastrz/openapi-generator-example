@@ -75,9 +75,6 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NewBook'
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/NewBookMultipart'
@@ -123,19 +120,13 @@ components:
           type: string
         available:
           type: boolean
-    NewBook:
-      title: New book
+    NewBookMultipart:
       type: object
       properties:
         title:
           type: string
         author:
           type: string
-    NewBookMultipart:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/NewBook'
-      properties:
         cover:
           type: string
           format: binary

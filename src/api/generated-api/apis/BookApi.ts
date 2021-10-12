@@ -17,16 +17,15 @@ import {
   Book,
   BookFromJSON,
   BookToJSON,
-  NewBook,
-  NewBookFromJSON,
-  NewBookToJSON,
   RemovedItem,
   RemovedItemFromJSON,
   RemovedItemToJSON,
 } from '../models';
 
 export interface BookApiAddBookRequest {
-  newBook: NewBook;
+  title?: string;
+  author?: string;
+  cover?: Blob;
 }
 
 export interface BookApiGetBookRequest {
@@ -56,18 +55,35 @@ export class BookApi extends runtime.BaseAPI {
     requestParameters: BookApiAddBookRequest,
     initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Book>> {
-    if (requestParameters.newBook === null || requestParameters.newBook === undefined) {
-      throw new runtime.RequiredError(
-        'newBook',
-        'Required parameter requestParameters.newBook was null or undefined when calling addBook.',
-      );
-    }
-
     const queryParameters: any = {};
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    headerParameters['Content-Type'] = 'application/json';
+    const consumes: runtime.Consume[] = [{ contentType: 'multipart/form-data' }];
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes);
+
+    let formParams: { append(param: string, value: any): any };
+    let useForm = false;
+    // use FormData to transmit files using content-type "multipart/form-data"
+    useForm = canConsumeForm;
+    if (useForm) {
+      formParams = new FormData();
+    } else {
+      formParams = new URLSearchParams();
+    }
+
+    if (requestParameters.title !== undefined) {
+      formParams.append('title', requestParameters.title as any);
+    }
+
+    if (requestParameters.author !== undefined) {
+      formParams.append('author', requestParameters.author as any);
+    }
+
+    if (requestParameters.cover !== undefined) {
+      formParams.append('cover', requestParameters.cover as any);
+    }
 
     const response = await this.request(
       {
@@ -75,7 +91,7 @@ export class BookApi extends runtime.BaseAPI {
         method: 'POST',
         headers: headerParameters,
         query: queryParameters,
-        body: NewBookToJSON(requestParameters.newBook),
+        body: formParams,
       },
       initOverrides,
     );

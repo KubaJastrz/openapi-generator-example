@@ -2,7 +2,6 @@ apis/BookApi.ts
 apis/index.ts
 index.ts
 models/Book.ts
-models/NewBook.ts
 models/RemovedItem.ts
 models/index.ts
 runtime.ts
