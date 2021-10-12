@@ -52,7 +52,10 @@ export class BookApi extends runtime.BaseAPI {
   /**
    * Add a new book
    */
-  async addBookRaw(requestParameters: BookApiAddBookRequest): Promise<runtime.ApiResponse<Book>> {
+  async addBookRaw(
+    requestParameters: BookApiAddBookRequest,
+    initOverrides?: RequestInit,
+  ): Promise<runtime.ApiResponse<Book>> {
     if (requestParameters.newBook === null || requestParameters.newBook === undefined) {
       throw new runtime.RequiredError(
         'newBook',
@@ -66,13 +69,16 @@ export class BookApi extends runtime.BaseAPI {
 
     headerParameters['Content-Type'] = 'application/json';
 
-    const response = await this.request({
-      path: `/book/add`,
-      method: 'POST',
-      headers: headerParameters,
-      query: queryParameters,
-      body: NewBookToJSON(requestParameters.newBook),
-    });
+    const response = await this.request(
+      {
+        path: `/book/add`,
+        method: 'POST',
+        headers: headerParameters,
+        query: queryParameters,
+        body: NewBookToJSON(requestParameters.newBook),
+      },
+      initOverrides,
+    );
 
     return new runtime.JSONApiResponse(response, (jsonValue) => BookFromJSON(jsonValue));
   }
@@ -80,15 +86,21 @@ export class BookApi extends runtime.BaseAPI {
   /**
    * Add a new book
    */
-  async addBook(requestParameters: BookApiAddBookRequest): Promise<Book> {
-    const response = await this.addBookRaw(requestParameters);
+  async addBook(
+    requestParameters: BookApiAddBookRequest,
+    initOverrides?: RequestInit,
+  ): Promise<Book> {
+    const response = await this.addBookRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
    * Get info about the book
    */
-  async getBookRaw(requestParameters: BookApiGetBookRequest): Promise<runtime.ApiResponse<Book>> {
+  async getBookRaw(
+    requestParameters: BookApiGetBookRequest,
+    initOverrides?: RequestInit,
+  ): Promise<runtime.ApiResponse<Book>> {
     if (requestParameters.id === null || requestParameters.id === undefined) {
       throw new runtime.RequiredError(
         'id',
@@ -100,12 +112,15 @@ export class BookApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    const response = await this.request({
-      path: `/book/{id}`.replace(`{${'id'}}`, encodeURIComponent(String(requestParameters.id))),
-      method: 'GET',
-      headers: headerParameters,
-      query: queryParameters,
-    });
+    const response = await this.request(
+      {
+        path: `/book/{id}`.replace(`{${'id'}}`, encodeURIComponent(String(requestParameters.id))),
+        method: 'GET',
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
 
     return new runtime.JSONApiResponse(response, (jsonValue) => BookFromJSON(jsonValue));
   }
@@ -113,8 +128,11 @@ export class BookApi extends runtime.BaseAPI {
   /**
    * Get info about the book
    */
-  async getBook(requestParameters: BookApiGetBookRequest): Promise<Book> {
-    const response = await this.getBookRaw(requestParameters);
+  async getBook(
+    requestParameters: BookApiGetBookRequest,
+    initOverrides?: RequestInit,
+  ): Promise<Book> {
+    const response = await this.getBookRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
@@ -123,6 +141,7 @@ export class BookApi extends runtime.BaseAPI {
    */
   async removeBookRaw(
     requestParameters: BookApiRemoveBookRequest,
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<RemovedItem>> {
     if (requestParameters.id === null || requestParameters.id === undefined) {
       throw new runtime.RequiredError(
@@ -135,15 +154,18 @@ export class BookApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    const response = await this.request({
-      path: `/book/{id}/remove`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(requestParameters.id)),
-      ),
-      method: 'POST',
-      headers: headerParameters,
-      query: queryParameters,
-    });
+    const response = await this.request(
+      {
+        path: `/book/{id}/remove`.replace(
+          `{${'id'}}`,
+          encodeURIComponent(String(requestParameters.id)),
+        ),
+        method: 'POST',
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
 
     return new runtime.JSONApiResponse(response, (jsonValue) => RemovedItemFromJSON(jsonValue));
   }
@@ -151,15 +173,21 @@ export class BookApi extends runtime.BaseAPI {
   /**
    * Remove a book
    */
-  async removeBook(requestParameters: BookApiRemoveBookRequest): Promise<RemovedItem> {
-    const response = await this.removeBookRaw(requestParameters);
+  async removeBook(
+    requestParameters: BookApiRemoveBookRequest,
+    initOverrides?: RequestInit,
+  ): Promise<RemovedItem> {
+    const response = await this.removeBookRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
   /**
    * Rent a book
    */
-  async rentBookRaw(requestParameters: BookApiRentBookRequest): Promise<runtime.ApiResponse<Book>> {
+  async rentBookRaw(
+    requestParameters: BookApiRentBookRequest,
+    initOverrides?: RequestInit,
+  ): Promise<runtime.ApiResponse<Book>> {
     if (requestParameters.id === null || requestParameters.id === undefined) {
       throw new runtime.RequiredError(
         'id',
@@ -171,15 +199,18 @@ export class BookApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    const response = await this.request({
-      path: `/book/{id}/rent`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(requestParameters.id)),
-      ),
-      method: 'POST',
-      headers: headerParameters,
-      query: queryParameters,
-    });
+    const response = await this.request(
+      {
+        path: `/book/{id}/rent`.replace(
+          `{${'id'}}`,
+          encodeURIComponent(String(requestParameters.id)),
+        ),
+        method: 'POST',
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
 
     return new runtime.JSONApiResponse(response, (jsonValue) => BookFromJSON(jsonValue));
   }
@@ -187,8 +218,11 @@ export class BookApi extends runtime.BaseAPI {
   /**
    * Rent a book
    */
-  async rentBook(requestParameters: BookApiRentBookRequest): Promise<Book> {
-    const response = await this.rentBookRaw(requestParameters);
+  async rentBook(
+    requestParameters: BookApiRentBookRequest,
+    initOverrides?: RequestInit,
+  ): Promise<Book> {
+    const response = await this.rentBookRaw(requestParameters, initOverrides);
     return await response.value();
   }
 
@@ -197,6 +231,7 @@ export class BookApi extends runtime.BaseAPI {
    */
   async returnBookRaw(
     requestParameters: BookApiReturnBookRequest,
+    initOverrides?: RequestInit,
   ): Promise<runtime.ApiResponse<Book>> {
     if (requestParameters.id === null || requestParameters.id === undefined) {
       throw new runtime.RequiredError(
@@ -209,15 +244,18 @@ export class BookApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    const response = await this.request({
-      path: `/book/{id}/return`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(requestParameters.id)),
-      ),
-      method: 'POST',
-      headers: headerParameters,
-      query: queryParameters,
-    });
+    const response = await this.request(
+      {
+        path: `/book/{id}/return`.replace(
+          `{${'id'}}`,
+          encodeURIComponent(String(requestParameters.id)),
+        ),
+        method: 'POST',
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
 
     return new runtime.JSONApiResponse(response, (jsonValue) => BookFromJSON(jsonValue));
   }
@@ -225,8 +263,11 @@ export class BookApi extends runtime.BaseAPI {
   /**
    * Return a book
    */
-  async returnBook(requestParameters: BookApiReturnBookRequest): Promise<Book> {
-    const response = await this.returnBookRaw(requestParameters);
+  async returnBook(
+    requestParameters: BookApiReturnBookRequest,
+    initOverrides?: RequestInit,
+  ): Promise<Book> {
+    const response = await this.returnBookRaw(requestParameters, initOverrides);
     return await response.value();
   }
 }

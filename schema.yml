@@ -78,6 +78,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/NewBook'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewBookMultipart'
       responses:
         '201':
           description: Created
@@ -128,6 +131,14 @@ components:
           type: string
         author:
           type: string
+    NewBookMultipart:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/NewBook'
+      properties:
+        cover:
+          type: string
+          format: binary
     RemovedItem:
       title: Removed item
       type: object

@@ -42,8 +42,8 @@ export class BaseAPI {
     return this.withMiddleware<T>(...middlewares);
   }
 
-  protected async request(context: RequestOpts): Promise<Response> {
-    const { url, init } = this.createFetchParams(context);
+  protected async request(context: RequestOpts, initOverrides?: RequestInit): Promise<Response> {
+    const { url, init } = this.createFetchParams(context, initOverrides);
     const response = await this.fetchApi(url, init);
     if (response.status >= 200 && response.status < 300) {
       return response;
@@ -51,7 +51,7 @@ export class BaseAPI {
     throw response;
   }
 
-  private createFetchParams(context: RequestOpts) {
+  private createFetchParams(context: RequestOpts, initOverrides?: RequestInit) {
     let url = this.configuration.basePath + context.path;
     if (context.query !== undefined && Object.keys(context.query).length !== 0) {
       // only add the querystring to the URL if there are query parameters.
@@ -72,6 +72,7 @@ export class BaseAPI {
       headers: headers,
       body,
       credentials: this.configuration.credentials,
+      ...initOverrides,
     };
     return { url, init };
   }
@@ -87,7 +88,7 @@ export class BaseAPI {
           })) || fetchParams;
       }
     }
-    let response = await this.configuration.fetchApi(fetchParams.url, fetchParams.init);
+    let response = await (this.configuration.fetchApi || fetch)(fetchParams.url, fetchParams.init);
     for (const middleware of this.middleware) {
       if (middleware.post) {
         response =
@@ -153,8 +154,8 @@ export class Configuration {
     return this.configuration.basePath != null ? this.configuration.basePath : BASE_PATH;
   }
 
-  get fetchApi(): FetchAPI {
-    return this.configuration.fetchApi || window.fetch.bind(window);
+  get fetchApi(): FetchAPI | undefined {
+    return this.configuration.fetchApi;
   }
 
   get middleware(): Middleware[] {
